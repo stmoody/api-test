@@ -1,5 +1,5 @@
 from github import Github
-from os.path import dirname
+from os.path import dirname, basename
 
 from GitHubUtils import \
     getContentFile, getDirectoryContent, \
@@ -8,31 +8,39 @@ from GitHubUtils import \
 
 class GitHubUploader:
 
-    def __init__(self, token, sRepo: str):
+    def __init__(self, token, sRepo: str, *, printLogs=True):
         g = Github(token)
         self._repo = g.get_repo(sRepo)
+
+        self._printLogs = printLogs
 
     def commitFiles(self, files: list[tuple]) -> list:
         lRet = []
 
         branch = 'script-upload'
-        lRet.append(createBranch(self._repo, branch, 'main'))
+        log = createBranch(self._repo, branch, 'main')
+        if self._printLogs: print(log)
+        lRet.append(log)
 
-        pathToFiles = dirname(files[0][0])
-        directoryContent = getDirectoryContent(self._repo, pathToFiles, branch)
+        afilepath = files[0][0] # assumes all files are in the same directory
+        directoryContent = getDirectoryContent(self._repo, afilepath, branch)
 
-        newFiles = [ (filename, content)
-                     for filename, content in files
-                     if not fileExists(filename, directoryContent) ]
-        changedFiles = [ (filename, content)
-                         for filename, content in files
-                         if filename not in newFiles
-                         and fileChanged(content, getContentFile(self._repo, filename, branch)) ]
+        newFiles = [ (filepath, content)
+                     for filepath, content in files
+                     if not fileExists(basename(filepath), directoryContent) ]
+        changedFiles = [ (filepath, content)
+                         for filepath, content in files
+                         if not any(filepath == fn for fn, _ in newFiles)
+                         and fileChanged(content, getContentFile(self._repo, filepath, branch)) ]
 
-        for filename, content in newFiles:
-            lRet.append(commitNew(self._repo, filename, content, branch, checkExists=False))
+        for filepath, content in newFiles:
+            log = commitNew(self._repo, filepath, content, branch, checkExists=False)
+            if self._printLogs: print(log)
+            lRet.append(log)
 
-        for filename, content in changedFiles:
-            lRet.append(commitUpdate(self._repo, filename, content, branch))
+        for filepath, content in changedFiles:
+            log = commitUpdate(self._repo, filepath, content, branch)
+            if self._printLogs: print(log)
+            lRet.append(log)
 
         return lRet

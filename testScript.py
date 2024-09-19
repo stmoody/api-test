@@ -4,7 +4,7 @@ sys.path.append(_SECRET_PATH)
 from secret import _GITHUB_PAT # ADD LOCALLY
 
 from GitHubUploader import GitHubUploader
-uploader = GitHubUploader(_GITHUB_PAT, 'stmoody/api-test')
+uploader = GitHubUploader(_GITHUB_PAT, 'stmoody/api-test', printLogs=True)
 
 baseFilePath = 'files'
 
@@ -20,8 +20,7 @@ baseFilePath = 'files'
 # files = [ (f'{baseFilePath}/{filename}', generateContent(20))
 #           for filename in filenames ]
 
-# logs = uploader.commit(files)
-# for log in logs: print(log)
+# uploader.commitFiles(files)
 
 
 
@@ -42,5 +41,12 @@ baseFilePath = 'files'
 #             updatedFileContent(f'{baseFilePath}/{filename}', 3))
 #            for filename in filenames ]
 
-# logs = uploader.commit(files)
-# for log in logs: print(log)
+# # add the non-updated files
+# filenames = [ 'b1.txt', 'b2.txt', 'b3.txt', 'b4.txt', 'b5.txt' ]
+
+# from fileutils import _getLocalFileContent
+# files += [ (f'{baseFilePath}/{filename}',
+#             _getLocalFileContent(f'{baseFilePath}/{filename}'))
+#            for filename in filenames ]
+
+# uploader.commitFiles(files)

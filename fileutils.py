@@ -21,21 +21,10 @@ def _updateContent(content: str, numberOfUpdates: int) -> str:
 
     return ' '.join(lContent)
 
-def _writeContentToLocalFile(content: str, filename: str) -> None:
-    with open(filename, 'w') as f: f.write(content)
-
-def updateFile(filename: str, numberOfUpdates: int) -> None:
+def updatedFileContent(filename: str, numberOfUpdates: int) -> str:
     content = _getLocalFileContent(filename)
-    updatedContent = _updateContent(content, numberOfUpdates)
-    _writeContentToLocalFile(updatedContent, filename)
+    return _updateContent(content, numberOfUpdates)
 
-if __name__ == '__main__':
-
-        from argparse import ArgumentParser
-        parser = ArgumentParser()
-        parser.add_argument('-f', '--filename', default='testfile.txt')
-        parser.add_argument('-u', '--updates', type=int, default=10)
-
-        args = parser.parse_args()
-        updateFile(args.filename, args.updates)
-        print(f'Content updated in {args.filename}')
+def generateContent(wordCount: int) -> str:
+    return ' '.join([ lFiftyMostCommonWords[randrange(len(lFiftyMostCommonWords))]
+                      for _ in range(wordCount) ])

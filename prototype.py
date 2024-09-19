@@ -107,3 +107,14 @@ print(f'{newFiles=}')
 print(f'{existingFiles=}')
 print(f'{changedFiles=}')
 print(f'{unchangedFiles=}')
+print('-'*30)
+
+newFiles, changedFiles, unchangedFiles = [], [], []
+for filename in lFilenames:
+    if not any(contentFile.name == filename for contentFile in directoryContent):
+        newFiles.append(filename)
+    elif repo.get_contents(f'{pathToFiles}/{filename}', ref='main').decoded_content.decode() == getfilecontent(f'{filename}'):
+        unchangedFiles.append(filename)
+    else: changedFiles.append(filename)
+
+print(f'{newFiles=}\n{changedFiles=}\n{unchangedFiles=}')

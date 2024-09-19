@@ -18,8 +18,8 @@ print(sha)
 
 # try creating a branch
 testBranchName = 'test-branch-stmoody'
-ref = repo.create_git_ref(ref=f'refs/heads/{testBranchName}', sha=sha)
-print(f'Branch {ref.ref} created')
+# ref = repo.create_git_ref(ref=f'refs/heads/{testBranchName}', sha=sha)
+# print(f'Branch {ref.ref} created')
 
 
 from fileutils import updatedFileContent, generateContent
@@ -69,8 +69,20 @@ def commitFile(repo, filepath, content, branch):
     ret = repo.update_file(filepath, commitMsg, content, fileSha, branch=branch)
     print(f'Created commit ({ret["commit"].sha} | branch={branch}) with message: {commitMsg}')
 
-commitFile(repo, filepath1, filecontent1, testBranchName)
-commitFile(repo, filepath2, filecontent2, testBranchName)
+# commitFile(repo, filepath1, filecontent1, testBranchName)
+# commitFile(repo, filepath2, filecontent2, testBranchName)
 
 
 
+# check if a file exists
+pathToFiles = 'files'
+directoryContent = repo.get_contents(pathToFiles, ref='main')
+print('--- checking if files exist ---')
+print(any(contentFile.name == filename1 for contentFile in directoryContent))
+print(any(contentFile.name == filename2 for contentFile in directoryContent))
+print(any(contentFile.name == 'fake-name.txt' for contentFile in directoryContent))
+print('--- checking if file has changed ---')
+existingFileContent = repo.get_contents(filepath1, ref='main').decoded_content.decode()
+print(existingFileContent == filecontent1)
+existingFileContent = repo.get_contents(filepath2, ref='main').decoded_content.decode()
+print(existingFileContent == filecontent2)

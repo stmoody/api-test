@@ -86,3 +86,24 @@ existingFileContent = repo.get_contents(filepath1, ref='main').decoded_content.d
 print(existingFileContent == filecontent1)
 existingFileContent = repo.get_contents(filepath2, ref='main').decoded_content.decode()
 print(existingFileContent == filecontent2)
+
+
+pathToFiles = pathToFiles
+lFilenames = [ filename1, filename2, 'fake-name.txt' ]
+
+newFiles = [ filename for filename in lFilenames if not any(contentFile.name == filename for contentFile in directoryContent) ]
+existingFiles = [ filename for filename in lFilenames if filename not in newFiles ]
+
+def getfilecontent(filename):
+    if filename == filename1: return filecontent1
+    if filename == filename2: return filecontent2
+    return None
+
+unchangedFiles = [ filename for filename in existingFiles
+                 if repo.get_contents(f'{pathToFiles}/{filename}', ref='main').decoded_content.decode() == getfilecontent(f'{filename}') ]
+changedFiles = [ filename for filename in existingFiles if filename not in unchangedFiles ]
+
+print(f'{newFiles=}')
+print(f'{existingFiles=}')
+print(f'{changedFiles=}')
+print(f'{unchangedFiles=}')

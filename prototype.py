@@ -118,3 +118,17 @@ for filename in lFilenames:
     else: changedFiles.append(filename)
 
 print(f'{newFiles=}\n{changedFiles=}\n{unchangedFiles=}')
+print('-'*30)
+
+
+pathToFiles = pathToFiles
+lFilenames = [ filename1, filename2, 'fake-name.txt' ]
+
+directoryContent = repo.get_contents(pathToFiles, ref='main')
+
+newFiles = [ filename for filename in lFilenames if not any(contentFile.name == filename for contentFile in directoryContent) ]
+changedFiles = [ filename for filename in lFilenames
+                 if filename not in newFiles
+                 and repo.get_contents(f'{pathToFiles}/{filename}', ref='main').decoded_content.decode() != getfilecontent(f'{filename}') ]
+
+print(f'{newFiles=}\n{changedFiles=}')

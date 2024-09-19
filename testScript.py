@@ -13,8 +13,8 @@ baseFilePath = 'files'
 # ## # Step 1: Upload some initial files # ##
 
 # # first create some files (that would be provided by build)
-# filenames = [ 'a1.txt', 'a2.txt', 'a3.txt', 'a4.txt', 'a5.txt',
-#               'b1.txt', 'b2.txt', 'b3.txt', 'b4.txt', 'b5.txt' ]
+# filenames = [ 'FA1.txt', 'FA2.txt', 'FA3.txt', 'FA4.txt', 'FA5.txt',
+#               'FB1.txt', 'FB2.txt', 'FB3.txt', 'FB4.txt', 'FB5.txt' ]
 
 # from fileutils import generateContent
 # files = [ (f'{baseFilePath}/{filename}', generateContent(20))
@@ -27,14 +27,14 @@ baseFilePath = 'files'
 # ## # Step 2: Create an update # ##
 
 # # create a couple new files
-# filenames = [ 'c1.txt', 'c2.txt' ]
+# filenames = [ 'FC1.txt', 'FC2.txt' ]
 
 # from fileutils import generateContent
 # files = [ (f'{baseFilePath}/{filename}', generateContent(20))
 #           for filename in filenames ]
 
 # # update a couple of existing files
-# filenames = [ 'a1.txt', 'a2.txt', 'a3.txt', 'a4.txt', 'a5.txt' ]
+# filenames = [ 'FA1.txt', 'FA2.txt', 'FA3.txt', 'FA4.txt', 'FA5.txt' ]
 
 # from fileutils import updatedFileContent
 # files += [ (f'{baseFilePath}/{filename}',
@@ -42,7 +42,7 @@ baseFilePath = 'files'
 #            for filename in filenames ]
 
 # # add the non-updated files
-# filenames = [ 'b1.txt', 'b2.txt', 'b3.txt', 'b4.txt', 'b5.txt' ]
+# filenames = [ 'FB1.txt', 'FB2.txt', 'FB3.txt', 'FB4.txt', 'FB5.txt' ]
 
 # from fileutils import _getLocalFileContent
 # files += [ (f'{baseFilePath}/{filename}',

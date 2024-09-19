@@ -3,6 +3,12 @@ from os.path import dirname
 def _createCommitMessage(sha: str, branch: str, commitMsg: str) -> str:
     return f'Created commit ({sha} | branch={branch}) with message: {commitMsg}'
 
+def getDirectoryContent(repo, filepath: str, branch: str) -> list:
+    return repo.get_contents(dirname(filepath), ref=branch)
+
+def fileExists(filepath: str, directoryContent: list) -> bool:
+    return any(contentFile.name == filepath for contentFile in directoryContent)
+
 def commitUpdate(repo, filepath, content, branch, *, checkDiff=True) -> str:
 
     contentFile = repo.get_contents(filepath, ref=branch)
@@ -18,8 +24,8 @@ def commitUpdate(repo, filepath, content, branch, *, checkDiff=True) -> str:
 def commitNew(repo, filepath, content, branch, *, checkExists) -> str:
 
     if checkExists:
-        directoryContent = repo.get_contents(dirname(filepath), ref=branch)
-        if any(contentFile.name == filepath for contentFile in directoryContent):
+        directoryContent = getDirectoryContent(repo, filepath, branch)
+        if fileExists(filepath, directoryContent):
             return f'File {filepath} already exists. Skipping commit.'
 
     commitMsg = f'creating {filepath}'

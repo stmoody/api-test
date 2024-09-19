@@ -36,6 +36,3 @@ class GitHubUploader:
             lRet.append(commitUpdate(self._repo, filename, content, branch))
 
         return lRet
-
-
-if __name__ == '__main__': pass

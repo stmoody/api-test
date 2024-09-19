@@ -9,17 +9,15 @@ def getDirectoryContent(repo, filepath: str, branch: str) -> list:
 def fileExists(filepath: str, directoryContent: list) -> bool:
     return any(contentFile.name == filepath for contentFile in directoryContent)
 
-def fileChanged(localContent: str,repo=None, filepath: str =None, branch: str =None, contentFile=None) -> bool:
-    if contentFile == None:
-        assert(repo != None)
-        assert(filepath != None and filepath != '')
-        assert(branch != None and branch != '')
-        contentFile = repo.get_contents(filepath, ref=branch)
+def getContentFile(repo, filepath: str, branch: str) -> str:
+    return repo.get_contents(filepath, ref=branch)
+
+def fileChanged(localContent: str, contentFile) -> bool:
     return contentFile.decoded_content.decode() != localContent
 
 def commitUpdate(repo, filepath, content, branch, *, checkDiff=True) -> str:
 
-    contentFile = repo.get_contents(filepath, ref=branch)
+    contentFile = getContentFile(repo, filepath, branch)
     if checkDiff and not fileChanged(content, contentFile=contentFile):
         return f'No changes to {filepath} detected. Skipping commit.'
     fileSha = contentFile.sha

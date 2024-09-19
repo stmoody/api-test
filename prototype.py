@@ -34,15 +34,43 @@ filename = 'testfile.txt'
 # print(f'Created commit ({ret["commit"].sha} | branch={testBranchName}) with message: {commitMsg}')
 
 
-# change existing file
-filename = filename
-path = f'files/{filename}'
-content = updatedFileContent(path, 5)
-commitMsg = f'Update {path}'
-# get file sha
-contentFile = repo.get_contents(path, ref=testBranchName)
-# print(contentFile)
-fileSha = contentFile.sha
-ret = repo.update_file(path, commitMsg, content, fileSha, branch=testBranchName)
-# print(ret)
-print(f'Created commit ({ret["commit"].sha} | branch={testBranchName}) with message: {commitMsg}')
+# # change existing file
+# filename = filename
+# path = f'files/{filename}'
+# content = updatedFileContent(path, 5)
+# commitMsg = f'Update {path}'
+# # get file sha
+# contentFile = repo.get_contents(path, ref=testBranchName)
+# # print(contentFile)
+# fileSha = contentFile.sha
+# ret = repo.update_file(path, commitMsg, content, fileSha, branch=testBranchName)
+# # print(ret)
+# print(f'Created commit ({ret["commit"].sha} | branch={testBranchName}) with message: {commitMsg}')
+
+filename1 = filename
+filename2 = 'testfile2.txt'
+
+filepath1 = f'files/{filename1}'
+filepath2 = f'files/{filename2}'
+
+from fileutils import _getLocalFileContent
+filecontent1 = _getLocalFileContent(filepath1)
+filecontent2 = updatedFileContent(filepath2, 5)
+
+def commitFile(repo, filepath, content, branch):
+    commitMsg = f'Blind editting {filepath}'
+    # fileSha = repo.get_contents(filepath, ref=branch).sha
+    contentFile = repo.get_contents(filepath, ref=branch)
+    fileSha = contentFile.sha
+    currentContent = contentFile.decoded_content.decode()
+    if currentContent == content:
+        print(f'No changes to {filepath}')
+        return
+    ret = repo.update_file(filepath, commitMsg, content, fileSha, branch=branch)
+    print(f'Created commit ({ret["commit"].sha} | branch={branch}) with message: {commitMsg}')
+
+commitFile(repo, filepath1, filecontent1, testBranchName)
+commitFile(repo, filepath2, filecontent2, testBranchName)
+
+
+

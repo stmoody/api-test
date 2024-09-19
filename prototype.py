@@ -23,11 +23,26 @@ print(f'Branch {ref.ref} created')
 
 
 from fileutils import updatedFileContent, generateContent
-content = generateContent(20)
+# content = generateContent(20)
 filename = 'testfile.txt'
 
-# commit new file
+
+# # commit new file
+# path = f'files/{filename}'
+# commitMsg = f'Add {path}'
+# ret = repo.create_file(path, commitMsg, content, branch=testBranchName)
+# print(f'Created commit ({ret["commit"].sha} | branch={testBranchName}) with message: {commitMsg}')
+
+
+# change existing file
+filename = filename
 path = f'files/{filename}'
-commitMsg = f'Add {path}'
-ret = repo.create_file(path, commitMsg, content, branch=testBranchName)
+content = updatedFileContent(path, 5)
+commitMsg = f'Update {path}'
+# get file sha
+contentFile = repo.get_contents(path, ref=testBranchName)
+# print(contentFile)
+fileSha = contentFile.sha
+ret = repo.update_file(path, commitMsg, content, fileSha, branch=testBranchName)
+# print(ret)
 print(f'Created commit ({ret["commit"].sha} | branch={testBranchName}) with message: {commitMsg}')
